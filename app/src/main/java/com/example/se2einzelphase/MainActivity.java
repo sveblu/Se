@@ -12,14 +12,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 
 public class MainActivity extends AppCompatActivity {
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,24 +41,24 @@ public class MainActivity extends AppCompatActivity {
 }
 
 class TCPClient extends Thread {
-    String matNR;
-    String result;
-    Socket clientSocket;
+    private String matNR;
+    private String result;
+    private Socket clientSocket;
 
     TCPClient(String input) {
-        this.matNR = input;
+        this.setMatNR(input);
     }
 
     public void run() {
 
         try {
-            clientSocket = new Socket("se2-isys.aau.at", 53212 );
-            DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
-            outToServer.writeBytes(matNR + "\n");
-            BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            setClientSocket(new Socket("se2-isys.aau.at", 53212 ));
+            DataOutputStream outToServer = new DataOutputStream(getClientSocket().getOutputStream());
+            outToServer.writeBytes(getMatNR() + "\n");
+            BufferedReader inFromServer = new BufferedReader(new InputStreamReader(getClientSocket().getInputStream()));
 
-            this.result = inFromServer.readLine();
-            clientSocket.close();
+            this.setResult(inFromServer.readLine());
+            getClientSocket().close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -75,5 +70,21 @@ class TCPClient extends Thread {
     }
     public String getMatNR () {
         return this.matNR;
+    }
+
+    public void setMatNR(String matNR) {
+        this.matNR = matNR;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    public Socket getClientSocket() {
+        return clientSocket;
+    }
+
+    public void setClientSocket(Socket clientSocket) {
+        this.clientSocket = clientSocket;
     }
 }
