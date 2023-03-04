@@ -12,6 +12,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -36,6 +38,36 @@ public class MainActivity extends AppCompatActivity {
 
         tv.setText(result);
 
+    }
+
+    public void sortMatNr(View view) {
+        EditText matNR = findViewById(R.id.editTextMATNR);
+        TextView tv = findViewById(R.id.answerServer);
+        String mtrklNR = String.valueOf(matNR.getEditableText());
+
+        ArrayList<Character> pufferEven = new ArrayList();
+        ArrayList<Character> pufferUneven = new ArrayList();
+
+        for (char c : mtrklNR.toCharArray()) {
+            if (c % 2 == 0) {
+                pufferEven.add(c);
+
+            } else {
+                pufferUneven.add(c);
+            }
+        }
+
+        Collections.sort(pufferEven);
+        Collections.sort(pufferUneven);
+
+        pufferEven.addAll(pufferUneven);
+
+        StringBuilder result = new StringBuilder();
+        for (Character c : pufferEven) {
+            result.append(c);
+        }
+
+        tv.setText(result);
     }
 
 }
