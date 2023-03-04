@@ -45,3 +45,35 @@ public class MainActivity extends AppCompatActivity {
 
 }
 
+class TCPClient extends Thread {
+    String matNR;
+    String result;
+    Socket clientSocket;
+
+    TCPClient(String input) {
+        this.matNR = input;
+    }
+
+    public void run() {
+
+        try {
+            clientSocket = new Socket("se2-isys.aau.at", 53212 );
+            DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+            outToServer.writeBytes(matNR + "\n");
+            BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+            this.result = inFromServer.readLine();
+            clientSocket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public String getResult (){
+        return this.result;
+    }
+    public String getMatNR () {
+        return this.matNR;
+    }
+}
